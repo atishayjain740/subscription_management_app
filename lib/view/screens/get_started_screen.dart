@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:subsciption_management_app/view/components/custom_button.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/routes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GetStartedScreen extends StatelessWidget {
   final VoidCallback toggleTheme;
@@ -14,7 +15,7 @@ class GetStartedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Get Started"),
+        title: const Text("Choose theme mode"),
         actions: [
           IconButton(
             icon: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
@@ -23,7 +24,7 @@ class GetStartedScreen extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0), // Padding around the content
+        padding: EdgeInsets.all(20.w), // Padding around the content
         child: Column(
           children: [
             const Spacer(),
@@ -39,19 +40,19 @@ class GetStartedScreen extends StatelessWidget {
               blendMode: BlendMode.dstIn,
               child: Image.asset(
                 'assets/images/logo.JPG',
-                height: 200,
-                width: double.infinity,
+                height: 200.h,
+                width: 300.h,
                 fit: BoxFit.contain,
               ),
             ),
 
-            const SizedBox(height: 32),
+            SizedBox(height: 32.h),
             Text(
               "Manage all your subscriptions",
               style: Theme.of(context).textTheme.displayLarge,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             Text(
               "Keep regular expenses on hand and receive timely notifications of upcoming fees",
               style: Theme.of(context).textTheme.bodyLarge,
@@ -61,8 +62,7 @@ class GetStartedScreen extends StatelessWidget {
             CustomButton(
               text: "Get Started",
               onPressed: () => Routes.navigateToMySubscriptions(context),
-            ),
-            const SizedBox(height: 20), // Extra space at the bottom
+            ), // Extra space at the bottom
           ],
         ),
       ),
