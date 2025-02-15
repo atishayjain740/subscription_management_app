@@ -4,20 +4,19 @@ import 'package:subsciption_management_app/config/constants.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:subsciption_management_app/view/components/initial_circle.dart';
 
-class AddSubscriptionCard extends StatelessWidget {
-  final VoidCallback onAddPressed;
-  final VoidCallback onDeletePressed;
-  Color color;
-  AddSubscriptionCard(
-      {Key? key,
-      required this.onAddPressed,
-      required this.onDeletePressed,
-      required this.color})
-      : super(key: key);
+class UpcomingPaymentCard extends StatelessWidget {
+  final Color color;
+  final Subscription subscription;
+
+  const UpcomingPaymentCard({
+    Key? key,
+    required this.subscription,
+    required this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 200.h,
       child: Card(
         color: color,
@@ -27,43 +26,42 @@ class AddSubscriptionCard extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         elevation: 4,
         child: Padding(
-          padding: EdgeInsets.all(10.w),
+          padding: EdgeInsets.all(16.w),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(width: 12.w),
-
-              // Subscription Details
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Add/Delete\nSubscription",
+                      "Upcoming payment: ₹${subscription.price}",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
+                        color: AppColors.white,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      subscription.name,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.white,
+                      ),
+                    ),
+                    Text(
+                      subscription.category,
+                      style: TextStyle(
+                        fontSize: 14.sp,
                         color: AppColors.white,
                       ),
                     ),
                   ],
                 ),
               ),
-
-              InkWell(
-                onTap: onAddPressed,
-                child: const InitialCircle(
-                  name: "+",
-                ),
-              ),
-              SizedBox(width: 8.w),
-              InkWell(
-                onTap: onDeletePressed,
-                child: const InitialCircle(
-                  name: "-",
-                ),
-              ),
+              SizedBox(width: 12.w),
+              InitialCircle(name: subscription.name)
             ],
           ),
         ),

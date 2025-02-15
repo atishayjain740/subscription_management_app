@@ -108,11 +108,13 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
       final subCategory = event.subscriptionCategory;
 
       List<Subscription> updatedSubs = List.from(currentState.subscriptions)
-        ..add(Subscription(
-            name: subName,
-            category: subCategory,
-            price: subPrice,
-            imageUrl: ""));
+        ..insert(
+            0,
+            Subscription(
+                name: subName,
+                category: subCategory,
+                price: subPrice,
+                imageUrl: ""));
 
       await hiveService.saveSubscriptions(updatedSubs);
 

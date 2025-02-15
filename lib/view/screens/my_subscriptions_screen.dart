@@ -8,6 +8,7 @@ import 'package:subsciption_management_app/config/constants.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:subsciption_management_app/view/components/add_subscription_card.dart';
 import 'package:subsciption_management_app/view/components/subscription_card.dart';
+import 'package:subsciption_management_app/view/components/upcoming_payment_card.dart';
 import 'package:subsciption_management_app/view/screens/add_filter_bottomsheet.dart';
 import 'package:subsciption_management_app/view/screens/add_subscription_bottomsheet.dart';
 import 'package:subsciption_management_app/view/screens/delete_filter_bottomsheet.dart';
@@ -35,52 +36,6 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
   }
-
-  // void _populateList(List<Subscription> sampleData) async {
-  //   List<String> newNames = [];
-  //   for (int i = 0; i < sampleData.length; i++) {
-  //     newNames.add(sampleData[i].name);
-  //   }
-
-  //   List<String> oldNames = [];
-  //   for (int i = 1; i < _subscriptions.length; i++) {
-  //     oldNames.add(_subscriptions[i].name);
-  //   }
-
-  //   for (int i = _subscriptions.length - 1; i >= 1; i--) {
-  //     if (newNames.contains(_subscriptions[i].name)) {
-  //       continue;
-  //     }
-  //     final removedSub = _subscriptions[i];
-  //     _subscriptions.removeAt(i);
-  //     if (_listKey.currentState != null) {
-  //       _listKey.currentState!.removeItem(
-  //           i,
-  //           (context, animation) => SubscriptionCard(
-  //                 subscription: removedSub,
-  //                 color: getCardColor(i),
-  //                 animation: animation,
-  //                 index: i,
-  //               ),
-  //           duration: Duration(milliseconds: 600));
-  //     }
-  //   }
-
-  //   int k = _subscriptions.length;
-  //   for (int i = 0; i < sampleData.length; i++) {
-  //     if (oldNames.contains(sampleData[i].name)) {
-  //       continue;
-  //     }
-  //     final addedSub = sampleData[i];
-  //     _subscriptions.add(addedSub);
-
-  //     if (_listKey.currentState != null) {
-  //       _listKey.currentState!
-  //           .insertItem(k, duration: const Duration(microseconds: 600));
-  //     }
-  //     k++;
-  //   }
-  // }
 
   void _populateList(List<Subscription> sampleData) async {
     List<String> newNames = sampleData.map((sub) => sub.name).toList();
@@ -177,77 +132,10 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          Center(
-              child: Text("General Tab",
-                  style: TextStyle(color: Colors.white, fontSize: 16.sp))),
+          _generalTabInfo(context),
           _buildSubscriptionList(context),
         ],
       ),
-      //appBar: AppBar(title: const Text("My Subscriptions")),
-      // body: Column(
-      //   children: [
-      //     Container(
-      //       height: 80.h,
-      //       padding: EdgeInsets.only(top: 5.w, bottom: 5.w),
-      //       color: Theme.of(context).scaffoldBackgroundColor,
-      //       child: Container(
-      //           height: 20.h,
-      //           decoration: BoxDecoration(
-      //             borderRadius: BorderRadius.circular(10),
-      //           ),
-      //           child: TabBar(
-      //             controller: _tabController,
-      //             indicatorPadding: EdgeInsets.all(5.w),
-      //             labelColor: AppColors.white,
-      //             indicator: BoxDecoration(
-      //                 color: Theme.of(context).primaryColor,
-      //                 borderRadius: BorderRadius.circular(10)),
-      //             tabs: [
-      //               Tab(
-      //                 child: Container(
-      //                     alignment: Alignment.center,
-      //                     child: const Text(
-      //                       "General",
-      //                       //style: Theme.of(context).textTheme.bodyLarge,
-      //                     )),
-      //               ),
-      //               Tab(
-      //                 child: Container(
-      //                     alignment: Alignment.center,
-      //                     child: const Text(
-      //                       "My subs",
-      //                       //style: Theme.of(context).textTheme.bodyLarge,
-      //                     )),
-      //               ),
-      //             ],
-      //           )),
-      //     ),
-      //     Expanded(
-      //       child: AnimatedSwitcher(
-      //         duration: const Duration(milliseconds: 1000),
-      //         transitionBuilder: (Widget child, Animation<double> animation) {
-      //           return SlideTransition(
-      //             position: Tween<Offset>(
-      //               begin: const Offset(1.0, 0.0),
-      //               end: const Offset(0.0, 0.0),
-      //             ).animate(CurvedAnimation(
-      //               parent: animation,
-      //               curve: Curves.easeInOut,
-      //             )),
-      //             child: child,
-      //           );
-      //         },
-      //         child: TabBarView(
-      //           controller: _tabController,
-      //           children: [
-      //             const Center(child: Text("General Content")),
-      //             _buildSubscriptionList(context),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 
@@ -401,9 +289,7 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          //Icon(icon, size: 20.sp),
-          //SizedBox(width: 8.w),
-          Text(text, style: TextStyle(fontSize: 14.sp)),
+          Text(text, style: TextStyle(fontSize: 14)),
         ],
       ),
     );
@@ -413,9 +299,64 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.w),
       child: IconButton(
-        icon: Icon(icon, color: Colors.white, size: 22.sp),
+        icon: Icon(icon, color: Theme.of(context).primaryColor, size: 22),
         onPressed: () {},
       ),
     );
+  }
+
+  Widget _generalTabInfo(BuildContext context) {
+    // return BlocBuilder<SubscriptionBloc, SubscriptionState>(
+    //   builder: (context, state) {
+    //     if (state is SubscriptionLoaded) {
+    //       return Column(
+    //         children: [
+    //           SizedBox(
+    //             height: 20.h,
+    //           ),
+    //           Visibility(
+    //             visible: state.subscriptions.isNotEmpty,
+    //             child: Align(
+    //               alignment: Alignment.centerLeft,
+    //               child: Padding(
+    //                 padding: EdgeInsets.only(left: 25.h),
+    //                 child: Text(
+    //                   "₹ ${getTotalExpense(state)}/month",
+    //                   style: Theme.of(context).textTheme.displayLarge,
+    //                   textAlign: TextAlign.start,
+    //                 ),
+    //               ),
+    //             ),
+    //           ),
+    //           SizedBox(
+    //             height: 20.h,
+    //           ),
+    //           Visibility(
+    //             visible: state.subscriptions.isNotEmpty,
+    //             child: UpcomingPaymentCard(
+    //                 subscription: state.subscriptions[0],
+    //                 color: getCardColor(3)),
+    //           ),
+    //         ],
+    //       );
+    //     }
+    //     return const Center(child: CircularProgressIndicator());
+    //   },
+    // );
+
+    return Container();
+  }
+
+  double getTotalExpense(SubscriptionLoaded state) {
+    try {
+      double total = 0;
+      for (Subscription s in state.subscriptions) {
+        double expense = double.parse(s.price);
+        total += expense;
+      }
+      return total;
+    } catch (e) {
+      return 0;
+    }
   }
 }

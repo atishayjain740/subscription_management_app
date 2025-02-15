@@ -5,6 +5,7 @@ import 'package:subsciption_management_app/bloc/subscription_event.dart';
 import 'package:subsciption_management_app/bloc/subscription_state.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:subsciption_management_app/view/components/custom_button.dart';
+import 'package:subsciption_management_app/view/components/show_dialog.dart';
 
 class DeleteSubscriptionBottomSheet extends StatefulWidget {
   const DeleteSubscriptionBottomSheet({super.key});
@@ -64,7 +65,7 @@ class _DeleteSubscriptionBottomSheetState
           ),
           CustomButton(
             onPressed: () {
-              if (_selectedSubscriptions.isNotEmpty) {
+              if (validateInput()) {
                 BlocProvider.of<SubscriptionBloc>(context).add(
                   DeleteSubscriptionEvent(
                     selectedSubscriptions: _selectedSubscriptions,
@@ -78,5 +79,13 @@ class _DeleteSubscriptionBottomSheetState
         ],
       ),
     );
+  }
+
+  bool validateInput() {
+    if (_selectedSubscriptions.isEmpty) {
+      showMessageDialog(context, "Please select atleast one subscription");
+      return false;
+    }
+    return true;
   }
 }

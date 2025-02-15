@@ -6,6 +6,7 @@ import 'package:subsciption_management_app/bloc/subscription_state.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:subsciption_management_app/view/components/custom_button.dart';
+import 'package:subsciption_management_app/view/components/show_dialog.dart';
 
 class DeleteFilterBottomSheet extends StatefulWidget {
   @override
@@ -58,7 +59,7 @@ class _DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
           ),
           CustomButton(
             onPressed: () {
-              if (_selectedFilters.isNotEmpty) {
+              if (validateInput()) {
                 BlocProvider.of<SubscriptionBloc>(context).add(
                   DeleteFilterEvent(
                     selectedFilters: _selectedFilters,
@@ -72,5 +73,14 @@ class _DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
         ],
       ),
     );
+  }
+
+  bool validateInput() {
+    if (_selectedFilters.isEmpty) {
+      showMessageDialog(context, "Please select atleast one filter");
+      return false;
+    }
+
+    return true;
   }
 }

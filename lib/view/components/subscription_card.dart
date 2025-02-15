@@ -42,14 +42,11 @@ class SubscriptionCard extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               elevation: 4,
               child: Padding(
-                padding: EdgeInsets.all(16.w),
+                padding: EdgeInsets.all(10.w),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // Subscription Image
-
-                    // Subscription Details
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +54,7 @@ class SubscriptionCard extends StatelessWidget {
                           Text(
                             subscription.name,
                             style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: AppColors.white,
                             ),
@@ -65,7 +62,7 @@ class SubscriptionCard extends StatelessWidget {
                           Text(
                             "₹${subscription.price}",
                             style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: AppColors.white,
                             ),
@@ -74,7 +71,7 @@ class SubscriptionCard extends StatelessWidget {
                           Text(
                             subscription.category,
                             style: TextStyle(
-                              fontSize: 14.sp,
+                              fontSize: 14,
                               color: AppColors.white,
                             ),
                           ),

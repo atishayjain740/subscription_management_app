@@ -5,6 +5,7 @@ import 'package:subsciption_management_app/bloc/subscription_event.dart';
 import 'package:subsciption_management_app/bloc/subscription_state.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:subsciption_management_app/view/components/custom_button.dart';
+import 'package:subsciption_management_app/view/components/show_dialog.dart';
 
 class AddFilterBottomSheet extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Container(
         padding: EdgeInsets.all(16.w),
@@ -35,27 +37,37 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
                 builder: (context, state) {
                   if (state is SubscriptionLoaded) {
                     _allFilters = state.filters;
-                    return ListView(
-                      children: state.subscriptions.map((subscription) {
-                        return CheckboxListTile(
-                          activeColor: Theme.of(context).primaryColor,
-                          checkboxShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          title: Text(subscription.name),
-                          value: _selectedSubscriptions
-                              .contains(subscription.name),
-                          onChanged: (bool? value) {
-                            setState(() {
-                              if (value == true) {
-                                _selectedSubscriptions.add(subscription.name);
-                              } else {
-                                _selectedSubscriptions
-                                    .remove(subscription.name);
-                              }
-                            });
-                          },
-                        );
-                      }).toList(),
+                    return NotificationListener(
+                      onNotification: (t) {
+                        if (t is UserScrollNotification) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        }
+                        return true;
+                      },
+                      child: ListView(
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        children: state.subscriptions.map((subscription) {
+                          return CheckboxListTile(
+                            activeColor: Theme.of(context).primaryColor,
+                            checkboxShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            title: Text(subscription.name),
+                            value: _selectedSubscriptions
+                                .contains(subscription.name),
+                            onChanged: (bool? value) {
+                              setState(() {
+                                if (value == true) {
+                                  _selectedSubscriptions.add(subscription.name);
+                                } else {
+                                  _selectedSubscriptions
+                                      .remove(subscription.name);
+                                }
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
                     );
                   }
                   return const Center(child: CircularProgressIndicator());
@@ -84,9 +96,11 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
 
   bool validateInput() {
     if (_filterNameController.text.isEmpty) {
+      showMessageDialog(context, "Please enter a filter name");
       return false;
     }
     if (_selectedSubscriptions.isEmpty) {
+      showMessageDialog(context, "Please select atleast one subscription");
       return false;
     }
 
