@@ -52,7 +52,7 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
       emit(SubscriptionLoaded(
         subscriptions: updatedSubscriptions,
         filters: updatedFilters,
-        selectedFilter: currentState.selectedFilter,
+        selectedFilter: filterAdded,
       ));
     }
   }
@@ -81,7 +81,7 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
       emit(SubscriptionLoaded(
         subscriptions: updatedSubscriptions,
         filters: updatedFilters,
-        selectedFilter: currentState.selectedFilter,
+        selectedFilter: "All",
       ));
     }
   }

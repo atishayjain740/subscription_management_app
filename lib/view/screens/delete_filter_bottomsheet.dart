@@ -5,6 +5,7 @@ import 'package:subsciption_management_app/bloc/subscription_event.dart';
 import 'package:subsciption_management_app/bloc/subscription_state.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:subsciption_management_app/view/components/custom_button.dart';
 
 class DeleteFilterBottomSheet extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.w),
-      height: 500.h,
+      height: 700.h,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -29,7 +30,13 @@ class _DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
                 if (state is SubscriptionLoaded) {
                   return ListView(
                     children: state.filters.map((filter) {
+                      if (filter == "All") {
+                        return Container();
+                      }
                       return CheckboxListTile(
+                        activeColor: Theme.of(context).primaryColor,
+                        checkboxShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
                         title: Text(filter),
                         value: _selectedFilters.contains(filter),
                         onChanged: (bool? value) {
@@ -49,7 +56,7 @@ class _DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
               },
             ),
           ),
-          ElevatedButton(
+          CustomButton(
             onPressed: () {
               if (_selectedFilters.isNotEmpty) {
                 BlocProvider.of<SubscriptionBloc>(context).add(
@@ -60,7 +67,7 @@ class _DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
                 Navigator.pop(context);
               }
             },
-            child: const Text("Delete Filter"),
+            text: "Delete Filter",
           ),
         ],
       ),

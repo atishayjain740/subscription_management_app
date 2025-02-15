@@ -5,6 +5,7 @@ import 'package:subsciption_management_app/bloc/subscription_event.dart';
 import 'package:subsciption_management_app/bloc/subscription_state.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:subsciption_management_app/view/components/custom_button.dart';
 
 class AddSubscriptionBottomSheet extends StatefulWidget {
   final String category;
@@ -24,7 +25,7 @@ class _AddSubscriptionBottomSheetState
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.w),
-      height: 500.h,
+      height: 600.h,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -40,34 +41,8 @@ class _AddSubscriptionBottomSheetState
             decoration:
                 const InputDecoration(labelText: "Monthly subscription price"),
           ),
-          // Expanded(
-          //   child: BlocBuilder<SubscriptionBloc, SubscriptionState>(
-          //     builder: (context, state) {
-          //       if (state is SubscriptionLoaded) {
-          //         return ListView(
-          //           children: state.subscriptions.map((subscription) {
-          //             return CheckboxListTile(
-          //               title: Text(subscription.name),
-          //               value:
-          //                   _selectedSubscriptions.contains(subscription.name),
-          //               onChanged: (bool? value) {
-          //                 setState(() {
-          //                   if (value == true) {
-          //                     _selectedSubscriptions.add(subscription.name);
-          //                   } else {
-          //                     _selectedSubscriptions.remove(subscription.name);
-          //                   }
-          //                 });
-          //               },
-          //             );
-          //           }).toList(),
-          //         );
-          //       }
-          //       return const Center(child: CircularProgressIndicator());
-          //     },
-          //   ),
-          // ),
-          ElevatedButton(
+          const Spacer(),
+          CustomButton(
             onPressed: () {
               if (_nameController.text.isNotEmpty &&
                   _priceController.text.isNotEmpty) {
@@ -81,7 +56,7 @@ class _AddSubscriptionBottomSheetState
                 Navigator.pop(context);
               }
             },
-            child: const Text("Save Subscription"),
+            text: "Save Subscription",
           ),
         ],
       ),

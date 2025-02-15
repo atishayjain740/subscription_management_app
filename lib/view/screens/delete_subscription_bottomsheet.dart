@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:subsciption_management_app/bloc/subscription_bloc.dart';
 import 'package:subsciption_management_app/bloc/subscription_event.dart';
 import 'package:subsciption_management_app/bloc/subscription_state.dart';
-import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:subsciption_management_app/view/components/custom_button.dart';
 
 class DeleteSubscriptionBottomSheet extends StatefulWidget {
+  const DeleteSubscriptionBottomSheet({super.key});
+
   @override
   _DeleteSubscriptionBottomSheetState createState() =>
       _DeleteSubscriptionBottomSheetState();
@@ -37,6 +39,9 @@ class _DeleteSubscriptionBottomSheetState
                     )
                         .map((subscription) {
                       return CheckboxListTile(
+                        activeColor: Theme.of(context).primaryColor,
+                        checkboxShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
                         title: Text(subscription.name),
                         value:
                             _selectedSubscriptions.contains(subscription.name),
@@ -57,7 +62,7 @@ class _DeleteSubscriptionBottomSheetState
               },
             ),
           ),
-          ElevatedButton(
+          CustomButton(
             onPressed: () {
               if (_selectedSubscriptions.isNotEmpty) {
                 BlocProvider.of<SubscriptionBloc>(context).add(
@@ -68,7 +73,7 @@ class _DeleteSubscriptionBottomSheetState
                 Navigator.pop(context);
               }
             },
-            child: const Text("Delete Subscription"),
+            text: "Delete Subscription",
           ),
         ],
       ),

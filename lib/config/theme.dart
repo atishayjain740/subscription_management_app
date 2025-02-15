@@ -11,6 +11,7 @@ class AppThemes {
       displayLarge: TextStyle(
           color: AppColors.black, fontSize: 26, fontWeight: FontWeight.bold),
       bodyLarge: TextStyle(color: AppColors.black, fontSize: 18),
+      bodyMedium: TextStyle(color: AppColors.black, fontSize: 12),
     ),
   );
 
@@ -23,6 +24,7 @@ class AppThemes {
       displayLarge: TextStyle(
           color: AppColors.white, fontSize: 26, fontWeight: FontWeight.bold),
       bodyLarge: TextStyle(color: AppColors.grey, fontSize: 18),
+      bodyMedium: TextStyle(color: AppColors.grey, fontSize: 12),
     ),
   );
 }
