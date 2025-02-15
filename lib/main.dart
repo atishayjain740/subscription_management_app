@@ -1,20 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:subsciption_management_app/config/theme.dart';
+import 'config/routes.dart';
+import 'view/screens/get_started_screen.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const SubscriptionApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class SubscriptionApp extends StatefulWidget {
+  const SubscriptionApp({super.key});
+
+  @override
+  State<SubscriptionApp> createState() => _SubscriptionAppState();
+}
+
+class _SubscriptionAppState extends State<SubscriptionApp> {
+  bool isDarkMode = true;
+
+  void toggleTheme() {
+    setState(() {
+      isDarkMode = !isDarkMode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      title: 'Subscription Manager',
+      debugShowCheckedModeBanner: false,
+      theme: isDarkMode ? AppThemes.darkTheme : AppThemes.lightTheme,
+      home: GetStartedScreen(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
     );
   }
 }

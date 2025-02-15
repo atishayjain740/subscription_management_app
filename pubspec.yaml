@@ -1,4 +1,4 @@
-name: subscription_management_app
+name: subsciption_management_app
 description: "A new Flutter project."
 publish_to: 'none'
 version: 0.1.0
@@ -17,3 +17,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
+          weight: 600
+  assets:
+    - assets/images/logo.JPG
