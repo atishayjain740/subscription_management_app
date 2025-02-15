@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:subsciption_management_app/bloc/subscription_bloc.dart';
 import 'package:subsciption_management_app/bloc/subscription_event.dart';
 import 'package:subsciption_management_app/bloc/subscription_state.dart';
-import 'package:subsciption_management_app/model/subsciption_model.dart';
+import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddSubscriptionBottomSheet extends StatefulWidget {

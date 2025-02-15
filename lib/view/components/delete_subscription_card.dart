@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 
-class AddSubscriptionCard extends StatelessWidget {
+class DeleteSubscriptionCard extends StatelessWidget {
   final VoidCallback onPressed;
-  const AddSubscriptionCard({Key? key, required this.onPressed})
+  const DeleteSubscriptionCard({Key? key, required this.onPressed})
       : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class AddSubscriptionCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Add Subscription",
+                      "Delete Subscription",
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
@@ -41,7 +41,7 @@ class AddSubscriptionCard extends StatelessWidget {
                 ),
               ),
 
-              const Icon(Icons.add),
+              const Icon(Icons.delete),
             ],
           ),
         ),

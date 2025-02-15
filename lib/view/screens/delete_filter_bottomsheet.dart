@@ -6,14 +6,14 @@ import 'package:subsciption_management_app/bloc/subscription_state.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddFilterBottomSheet extends StatefulWidget {
+class DeleteFilterBottomSheet extends StatefulWidget {
   @override
-  _AddFilterBottomSheetState createState() => _AddFilterBottomSheetState();
+  _DeleteFilterBottomSheetState createState() =>
+      _DeleteFilterBottomSheetState();
 }
 
-class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
-  final TextEditingController _filterNameController = TextEditingController();
-  final List<String> _selectedSubscriptions = [];
+class _DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
+  final List<String> _selectedFilters = [];
 
   @override
   Widget build(BuildContext context) {
@@ -23,26 +23,21 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextField(
-            controller: _filterNameController,
-            decoration: const InputDecoration(labelText: "Filter Name"),
-          ),
           Expanded(
             child: BlocBuilder<SubscriptionBloc, SubscriptionState>(
               builder: (context, state) {
                 if (state is SubscriptionLoaded) {
                   return ListView(
-                    children: state.subscriptions.map((subscription) {
+                    children: state.filters.map((filter) {
                       return CheckboxListTile(
-                        title: Text(subscription.name),
-                        value:
-                            _selectedSubscriptions.contains(subscription.name),
+                        title: Text(filter),
+                        value: _selectedFilters.contains(filter),
                         onChanged: (bool? value) {
                           setState(() {
                             if (value == true) {
-                              _selectedSubscriptions.add(subscription.name);
+                              _selectedFilters.add(filter);
                             } else {
-                              _selectedSubscriptions.remove(subscription.name);
+                              _selectedFilters.remove(filter);
                             }
                           });
                         },
@@ -56,18 +51,16 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (_filterNameController.text.isNotEmpty &&
-                  _selectedSubscriptions.isNotEmpty) {
+              if (_selectedFilters.isNotEmpty) {
                 BlocProvider.of<SubscriptionBloc>(context).add(
-                  AddFilterEvent(
-                    filterName: _filterNameController.text,
-                    selectedSubscriptions: _selectedSubscriptions,
+                  DeleteFilterEvent(
+                    selectedFilters: _selectedFilters,
                   ),
                 );
                 Navigator.pop(context);
               }
             },
-            child: const Text("Save Filter"),
+            child: const Text("Delete Filter"),
           ),
         ],
       ),

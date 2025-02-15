@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:subsciption_management_app/model/subsciption_model.dart';
+import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:subsciption_management_app/service/hive_service.dart';
 import 'subscription_event.dart';
 import 'subscription_state.dart';
@@ -10,18 +10,20 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
   SubscriptionBloc(this.hiveService) : super(SubscriptionInitial()) {
     on<LoadSubscriptions>(_onLoadSubscriptions);
     on<AddFilterEvent>(_onAddFilter);
+    on<DeleteFilterEvent>(_onDeleteFilter);
     on<ChangeFilterEvent>(_onChangeFilter);
     on<AddSubscriptionEvent>(_onAddSubscription);
+    on<DeleteSubscriptionEvent>(_onDeleteSubscription);
   }
 
   void _onLoadSubscriptions(
       LoadSubscriptions event, Emitter<SubscriptionState> emit) async {
-    final subscriptions = await hiveService.getSubscriptions();
-    final filters = await hiveService.getFilters();
+    final subscriptions = hiveService.getSubscriptions();
+    final filters = hiveService.getFilters();
 
     emit(SubscriptionLoaded(
-      subscriptions: subscriptions,
-      filters: filters,
+      subscriptions: subscriptions!,
+      filters: filters!,
       selectedFilter: "All",
     ));
   }
@@ -44,7 +46,37 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
             : sub;
       }).toList();
 
-      //await hiveService.saveFilters(updatedFilters);
+      await hiveService.saveFilters(updatedFilters);
+      await hiveService.saveSubscriptions(updatedSubscriptions);
+
+      emit(SubscriptionLoaded(
+        subscriptions: updatedSubscriptions,
+        filters: updatedFilters,
+        selectedFilter: currentState.selectedFilter,
+      ));
+    }
+  }
+
+  void _onDeleteFilter(
+      DeleteFilterEvent event, Emitter<SubscriptionState> emit) async {
+    if (state is SubscriptionLoaded) {
+      final currentState = state as SubscriptionLoaded;
+
+      final filtersSelected = event.selectedFilters;
+
+      final updatedFilters = List<String>.from(currentState.filters);
+      updatedFilters
+          .removeWhere((element) => filtersSelected.contains(element));
+
+      List<Subscription> updatedSubscriptions =
+          currentState.subscriptions.map((sub) {
+        return filtersSelected.contains(sub.category)
+            ? sub.copyWith(category: "")
+            : sub;
+      }).toList();
+
+      await hiveService.saveFilters(updatedFilters);
+      await hiveService.saveSubscriptions(updatedSubscriptions);
 
       emit(SubscriptionLoaded(
         subscriptions: updatedSubscriptions,
@@ -71,16 +103,38 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
       final subPrice = event.subscriptionPrice;
       final subCategory = event.subscriptionCategory;
 
-      currentState.subscriptions.add(Subscription(
-          name: subName, category: subCategory, price: subPrice, imageUrl: ""));
+      List<Subscription> updatedSubs = List.from(currentState.subscriptions)
+        ..add(Subscription(
+            name: subName,
+            category: subCategory,
+            price: subPrice,
+            imageUrl: ""));
 
-      //await hiveService.saveFilters(updatedFilters);
+      await hiveService.saveSubscriptions(updatedSubs);
 
-      emit(SubscriptionLoaded(
-        subscriptions: currentState.subscriptions,
-        filters: currentState.filters,
-        selectedFilter: currentState.selectedFilter,
-      ));
+      emit(
+        currentState.copyWith(subscriptions: updatedSubs),
+      );
+    }
+  }
+
+  void _onDeleteSubscription(
+      DeleteSubscriptionEvent event, Emitter<SubscriptionState> emit) async {
+    if (state is SubscriptionLoaded) {
+      final currentState = state as SubscriptionLoaded;
+
+      final subscriptionsSelected = event.selectedSubscriptions;
+
+      final updatedSubscriptions =
+          List<Subscription>.from(currentState.subscriptions);
+      updatedSubscriptions.removeWhere(
+          (element) => subscriptionsSelected.contains(element.name));
+
+      await hiveService.saveSubscriptions(updatedSubscriptions);
+
+      emit(
+        currentState.copyWith(subscriptions: updatedSubscriptions),
+      );
     }
   }
 }

@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:subsciption_management_app/bloc/subscription_bloc.dart';
 import 'package:subsciption_management_app/bloc/subscription_state.dart';
-import 'package:subsciption_management_app/model/subsciption_model.dart';
+import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:subsciption_management_app/view/components/add_subscription_card.dart';
+import 'package:subsciption_management_app/view/components/delete_subscription_card.dart';
 import 'package:subsciption_management_app/view/components/subscription_card.dart';
 import 'package:subsciption_management_app/view/screens/add_filter_bottomsheet.dart';
 import 'package:subsciption_management_app/view/screens/add_subscription_bottomsheet.dart';
+import 'package:subsciption_management_app/view/screens/delete_filter_bottomsheet.dart';
+import 'package:subsciption_management_app/view/screens/delete_subscription_bottomsheet.dart';
 import '../components/filter_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -71,7 +74,7 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
               _buildFilterButtons(context, state.filters),
               Expanded(
                 child: ListView.builder(
-                  itemCount: subscriptions.length + 1,
+                  itemCount: subscriptions.length + 2,
                   itemBuilder: (context, index) {
                     if (index == 0) {
                       return AddSubscriptionCard(
@@ -87,9 +90,22 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
                           );
                         },
                       );
+                    } else if (index == 1) {
+                      return DeleteSubscriptionCard(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (_) => BlocProvider.value(
+                              value: BlocProvider.of<SubscriptionBloc>(context),
+                              child: DeleteSubscriptionBottomSheet(),
+                            ),
+                          );
+                        },
+                      );
                     }
                     return SubscriptionCard(
-                        subscription: subscriptions[index - 1]);
+                        subscription: subscriptions[index - 2]);
                   },
                 ),
               ),
@@ -118,6 +134,19 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
                   builder: (_) => BlocProvider.value(
                     value: BlocProvider.of<SubscriptionBloc>(context),
                     child: AddFilterBottomSheet(),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<SubscriptionBloc>(context),
+                    child: DeleteFilterBottomSheet(),
                   ),
                 );
               },

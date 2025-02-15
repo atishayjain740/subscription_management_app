@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:subsciption_management_app/model/subsciption_model.dart';
+import 'package:subsciption_management_app/model/subscription.dart';
 
 abstract class SubscriptionEvent extends Equatable {
   @override
@@ -17,6 +17,15 @@ class AddFilterEvent extends SubscriptionEvent {
 
   @override
   List<Object?> get props => [filterName, selectedSubscriptions];
+}
+
+class DeleteFilterEvent extends SubscriptionEvent {
+  final List<String> selectedFilters;
+
+  DeleteFilterEvent({required this.selectedFilters});
+
+  @override
+  List<Object?> get props => [selectedFilters];
 }
 
 class ChangeFilterEvent extends SubscriptionEvent {
@@ -40,4 +49,15 @@ class AddSubscriptionEvent extends SubscriptionEvent {
 
   @override
   List<Object?> get props => [subscriptionName, subscriptionPrice];
+}
+
+class DeleteSubscriptionEvent extends SubscriptionEvent {
+  final List<String> selectedSubscriptions;
+
+  DeleteSubscriptionEvent({
+    required this.selectedSubscriptions,
+  });
+
+  @override
+  List<Object?> get props => [selectedSubscriptions];
 }

@@ -6,13 +6,14 @@ import 'package:subsciption_management_app/bloc/subscription_state.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddFilterBottomSheet extends StatefulWidget {
+class DeleteSubscriptionBottomSheet extends StatefulWidget {
   @override
-  _AddFilterBottomSheetState createState() => _AddFilterBottomSheetState();
+  _DeleteSubscriptionBottomSheetState createState() =>
+      _DeleteSubscriptionBottomSheetState();
 }
 
-class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
-  final TextEditingController _filterNameController = TextEditingController();
+class _DeleteSubscriptionBottomSheetState
+    extends State<DeleteSubscriptionBottomSheet> {
   final List<String> _selectedSubscriptions = [];
 
   @override
@@ -23,16 +24,18 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextField(
-            controller: _filterNameController,
-            decoration: const InputDecoration(labelText: "Filter Name"),
-          ),
           Expanded(
             child: BlocBuilder<SubscriptionBloc, SubscriptionState>(
               builder: (context, state) {
                 if (state is SubscriptionLoaded) {
                   return ListView(
-                    children: state.subscriptions.map((subscription) {
+                    children: state.subscriptions
+                        .where(
+                      (element) =>
+                          element.category == state.selectedFilter ||
+                          state.selectedFilter == "All",
+                    )
+                        .map((subscription) {
                       return CheckboxListTile(
                         title: Text(subscription.name),
                         value:
@@ -56,18 +59,16 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (_filterNameController.text.isNotEmpty &&
-                  _selectedSubscriptions.isNotEmpty) {
+              if (_selectedSubscriptions.isNotEmpty) {
                 BlocProvider.of<SubscriptionBloc>(context).add(
-                  AddFilterEvent(
-                    filterName: _filterNameController.text,
+                  DeleteSubscriptionEvent(
                     selectedSubscriptions: _selectedSubscriptions,
                   ),
                 );
                 Navigator.pop(context);
               }
             },
-            child: const Text("Save Filter"),
+            child: const Text("Delete Subscription"),
           ),
         ],
       ),

@@ -7,10 +7,17 @@ import 'view/screens/get_started_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'model/subscription.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+
+  // Register the Adapter
+  Hive.registerAdapter(SubscriptionAdapter());
+
+  // Initialize Hive Service
+  await HiveService().init();
 
   runApp(const ScreenUtilInit(
       designSize: Size(375, 812), // Base design (iPhone X)
