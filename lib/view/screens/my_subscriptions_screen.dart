@@ -7,7 +7,6 @@ import 'package:subsciption_management_app/bloc/subscription_state.dart';
 import 'package:subsciption_management_app/config/constants.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:subsciption_management_app/view/components/add_subscription_card.dart';
-import 'package:subsciption_management_app/view/components/delete_subscription_card.dart';
 import 'package:subsciption_management_app/view/components/subscription_card.dart';
 import 'package:subsciption_management_app/view/screens/add_filter_bottomsheet.dart';
 import 'package:subsciption_management_app/view/screens/add_subscription_bottomsheet.dart';
@@ -26,6 +25,10 @@ class MySubscriptionsScreen extends StatefulWidget {
 class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  List<Subscription> _subscriptions = [
+    Subscription(name: "", category: "", price: "", imageUrl: ""),
+  ];
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   @override
   void initState() {
@@ -33,74 +36,218 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
     _tabController = TabController(length: 2, vsync: this);
   }
 
+  // void _populateList(List<Subscription> sampleData) async {
+  //   List<String> newNames = [];
+  //   for (int i = 0; i < sampleData.length; i++) {
+  //     newNames.add(sampleData[i].name);
+  //   }
+
+  //   List<String> oldNames = [];
+  //   for (int i = 1; i < _subscriptions.length; i++) {
+  //     oldNames.add(_subscriptions[i].name);
+  //   }
+
+  //   for (int i = _subscriptions.length - 1; i >= 1; i--) {
+  //     if (newNames.contains(_subscriptions[i].name)) {
+  //       continue;
+  //     }
+  //     final removedSub = _subscriptions[i];
+  //     _subscriptions.removeAt(i);
+  //     if (_listKey.currentState != null) {
+  //       _listKey.currentState!.removeItem(
+  //           i,
+  //           (context, animation) => SubscriptionCard(
+  //                 subscription: removedSub,
+  //                 color: getCardColor(i),
+  //                 animation: animation,
+  //                 index: i,
+  //               ),
+  //           duration: Duration(milliseconds: 600));
+  //     }
+  //   }
+
+  //   int k = _subscriptions.length;
+  //   for (int i = 0; i < sampleData.length; i++) {
+  //     if (oldNames.contains(sampleData[i].name)) {
+  //       continue;
+  //     }
+  //     final addedSub = sampleData[i];
+  //     _subscriptions.add(addedSub);
+
+  //     if (_listKey.currentState != null) {
+  //       _listKey.currentState!
+  //           .insertItem(k, duration: const Duration(microseconds: 600));
+  //     }
+  //     k++;
+  //   }
+  // }
+
+  void _populateList(List<Subscription> sampleData) async {
+    List<String> newNames = sampleData.map((sub) => sub.name).toList();
+    List<String> oldNames =
+        _subscriptions.skip(1).map((sub) => sub.name).toList();
+
+    // Remove items smoothly one by one
+    for (int i = _subscriptions.length - 1; i >= 1; i--) {
+      if (newNames.contains(_subscriptions[i].name)) continue;
+
+      final removedSub = _subscriptions[i];
+      _subscriptions.removeAt(i);
+
+      if (_listKey.currentState != null) {
+        _listKey.currentState!.removeItem(
+          i,
+          (context, animation) => SubscriptionCard(
+            subscription: removedSub,
+            color: getCardColor(i),
+            animation: animation,
+            index: i,
+          ),
+          duration: const Duration(milliseconds: 400), // Faster remove
+        );
+      }
+      await Future.delayed(
+          const Duration(milliseconds: 300)); // Delay for smooth removal
+    }
+
+    int k = _subscriptions.length;
+
+    // Add items smoothly one by one
+    for (int i = 0; i < sampleData.length; i++) {
+      if (oldNames.contains(sampleData[i].name)) continue;
+
+      final addedSub = sampleData[i];
+      _subscriptions.add(addedSub);
+
+      if (_listKey.currentState != null) {
+        _listKey.currentState!.insertItem(
+          k,
+          duration: const Duration(milliseconds: 600), // Smooth addition
+        );
+      }
+
+      k++;
+      await Future.delayed(
+          const Duration(milliseconds: 300)); // Delay for smooth addition
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("My Subscriptions")),
-      body: Column(
-        children: [
-          Container(
-            height: 80.h,
-            padding: EdgeInsets.only(top: 5.w, bottom: 5.w),
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: Container(
-                height: 20.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  indicatorPadding: EdgeInsets.all(5.w),
-                  labelColor: AppColors.white,
-                  indicator: BoxDecoration(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
+        title: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                  child: TabBar(
+                    dividerColor: Colors.transparent,
+                    indicatorColor: Colors.transparent,
+                    controller: _tabController,
+                    indicator: BoxDecoration(
                       color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10)),
-                  tabs: [
-                    Tab(
-                      child: Container(
-                          alignment: Alignment.center,
-                          child: const Text(
-                            "General",
-                            //style: Theme.of(context).textTheme.bodyLarge,
-                          )),
+                      borderRadius: BorderRadius.circular(30.r),
                     ),
-                    Tab(
-                      child: Container(
-                          alignment: Alignment.center,
-                          child: const Text(
-                            "My subs",
-                            //style: Theme.of(context).textTheme.bodyLarge,
-                          )),
-                    ),
-                  ],
-                )),
-          ),
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 1000),
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(1.0, 0.0),
-                    end: const Offset(0.0, 0.0),
-                  ).animate(CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeInOut,
-                  )),
-                  child: child,
-                );
-              },
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  const Center(child: Text("General Content")),
-                  _buildSubscriptionList(context),
-                ],
+                    labelColor: AppColors.white,
+                    unselectedLabelColor: AppColors.grey,
+                    labelPadding: EdgeInsets.symmetric(horizontal: 4.w),
+                    tabs: [
+                      _buildTab(Icons.grid_view, "General"),
+                      _buildTab(Icons.work, "My Subs"),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
+        ),
+        leading: _buildIcon(Icons.menu),
+        actions: [
+          _buildIcon(Icons.notifications),
         ],
       ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          Center(
+              child: Text("General Tab",
+                  style: TextStyle(color: Colors.white, fontSize: 16.sp))),
+          _buildSubscriptionList(context),
+        ],
+      ),
+      //appBar: AppBar(title: const Text("My Subscriptions")),
+      // body: Column(
+      //   children: [
+      //     Container(
+      //       height: 80.h,
+      //       padding: EdgeInsets.only(top: 5.w, bottom: 5.w),
+      //       color: Theme.of(context).scaffoldBackgroundColor,
+      //       child: Container(
+      //           height: 20.h,
+      //           decoration: BoxDecoration(
+      //             borderRadius: BorderRadius.circular(10),
+      //           ),
+      //           child: TabBar(
+      //             controller: _tabController,
+      //             indicatorPadding: EdgeInsets.all(5.w),
+      //             labelColor: AppColors.white,
+      //             indicator: BoxDecoration(
+      //                 color: Theme.of(context).primaryColor,
+      //                 borderRadius: BorderRadius.circular(10)),
+      //             tabs: [
+      //               Tab(
+      //                 child: Container(
+      //                     alignment: Alignment.center,
+      //                     child: const Text(
+      //                       "General",
+      //                       //style: Theme.of(context).textTheme.bodyLarge,
+      //                     )),
+      //               ),
+      //               Tab(
+      //                 child: Container(
+      //                     alignment: Alignment.center,
+      //                     child: const Text(
+      //                       "My subs",
+      //                       //style: Theme.of(context).textTheme.bodyLarge,
+      //                     )),
+      //               ),
+      //             ],
+      //           )),
+      //     ),
+      //     Expanded(
+      //       child: AnimatedSwitcher(
+      //         duration: const Duration(milliseconds: 1000),
+      //         transitionBuilder: (Widget child, Animation<double> animation) {
+      //           return SlideTransition(
+      //             position: Tween<Offset>(
+      //               begin: const Offset(1.0, 0.0),
+      //               end: const Offset(0.0, 0.0),
+      //             ).animate(CurvedAnimation(
+      //               parent: animation,
+      //               curve: Curves.easeInOut,
+      //             )),
+      //             child: child,
+      //           );
+      //         },
+      //         child: TabBarView(
+      //           controller: _tabController,
+      //           children: [
+      //             const Center(child: Text("General Content")),
+      //             _buildSubscriptionList(context),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 
@@ -113,63 +260,19 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
               : state.subscriptions
                   .where((element) => element.category == state.selectedFilter)
                   .toList();
+          _populateList(subscriptions);
 
-          // selectedFilter = state.selectedFilter;
+          //double offset = index * -100.h;
 
           return Column(
             children: [
               _buildFilterButtons(context, state.filters, state),
               Expanded(
-                child: ListView.builder(
-                  itemCount: subscriptions.length + 2,
-                  itemBuilder: (context, index) {
-                    double offset = index * -30.h;
-                    if (index == 0) {
-                      return Transform.translate(
-                        offset: Offset(0, offset),
-                        child: AddSubscriptionCard(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (_) => BlocProvider.value(
-                                value:
-                                    BlocProvider.of<SubscriptionBloc>(context),
-                                child: AddSubscriptionBottomSheet(
-                                    category: state.selectedFilter),
-                              ),
-                            );
-                          },
-                          color: getCardColor(index),
-                        ),
-                      );
-                    } else if (index == 1) {
-                      return Transform.translate(
-                        offset: Offset(0, offset),
-                        child: DeleteSubscriptionCard(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (_) => BlocProvider.value(
-                                value:
-                                    BlocProvider.of<SubscriptionBloc>(context),
-                                child: DeleteSubscriptionBottomSheet(),
-                              ),
-                            );
-                          },
-                          color: getCardColor(index),
-                        ),
-                      );
-                    }
-
-                    return Transform.translate(
-                      offset: Offset(0, offset),
-                      child: SubscriptionCard(
-                        subscription: subscriptions[index - 2],
-                        color: getCardColor(index),
-                      ),
-                    );
+                child: AnimatedList(
+                  key: _listKey,
+                  initialItemCount: _subscriptions.length,
+                  itemBuilder: (context, index, animation) {
+                    return getSubCard(context, index, state, animation);
                   },
                 ),
               ),
@@ -253,18 +356,66 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
     );
   }
 
-  final List<Color> cardColors = [
-    Color(0xFF4A90E2), // Soft Blue
-    Color(0xFF50E3C2), // Mint Green
-    Color(0xFFFFA726), // Warm Orange
-    Color(0xFF7B61FF), // Vibrant Purple
-    Color(0xFFEF5350), // Soft Red
-    Color(0xFF26C6DA), // Light Cyan
-    Color(0xFFAB47BC), // Soft Lavender
-    Color(0xFFFFD54F), // Warm Yellow
-  ];
+  Widget getSubCard(BuildContext context, int index, SubscriptionLoaded state,
+      Animation<double> animation) {
+    if (index == 0) {
+      return AddSubscriptionCard(
+          onAddPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (_) => BlocProvider.value(
+                value: BlocProvider.of<SubscriptionBloc>(context),
+                child:
+                    AddSubscriptionBottomSheet(category: state.selectedFilter),
+              ),
+            );
+          },
+          onDeletePressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (_) => BlocProvider.value(
+                value: BlocProvider.of<SubscriptionBloc>(context),
+                child: const DeleteSubscriptionBottomSheet(),
+              ),
+            );
+          },
+          color: getCardColor(index));
+    } else {
+      return SubscriptionCard(
+          subscription: _subscriptions[index],
+          color: getCardColor(index),
+          animation: animation,
+          index: index);
+    }
+  }
 
   Color getCardColor(int index) {
-    return cardColors[index % cardColors.length]; // Cycles through colors
+    return AppColors.cardColors[
+        index % AppColors.cardColors.length]; // Cycles through colors
+  }
+
+  Widget _buildTab(IconData icon, String text) {
+    return Tab(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          //Icon(icon, size: 20.sp),
+          //SizedBox(width: 8.w),
+          Text(text, style: TextStyle(fontSize: 14.sp)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIcon(IconData icon) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: IconButton(
+        icon: Icon(icon, color: Colors.white, size: 22.sp),
+        onPressed: () {},
+      ),
+    );
   }
 }

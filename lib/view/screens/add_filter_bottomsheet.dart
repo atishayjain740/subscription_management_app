@@ -89,9 +89,6 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
     if (_selectedSubscriptions.isEmpty) {
       return false;
     }
-    if (_allFilters.contains(_filterNameController.text)) {
-      return false;
-    }
 
     return true;
   }

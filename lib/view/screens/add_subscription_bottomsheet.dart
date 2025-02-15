@@ -37,6 +37,7 @@ class _AddSubscriptionBottomSheetState
             height: 20.h,
           ),
           TextField(
+            keyboardType: TextInputType.number,
             controller: _priceController,
             decoration:
                 const InputDecoration(labelText: "Monthly subscription price"),

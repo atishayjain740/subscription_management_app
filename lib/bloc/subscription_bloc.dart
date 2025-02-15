@@ -38,6 +38,10 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
 
       final updatedFilters = List<String>.from(currentState.filters);
 
+      if (currentState.filters.contains(filterAdded)) {
+        updatedFilters.removeWhere((element) => element == filterAdded);
+      }
+
       updatedFilters.add(filterAdded);
       List<Subscription> updatedSubscriptions =
           currentState.subscriptions.map((sub) {
