@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:subsciption_management_app/bloc/subscription_bloc.dart';
+import 'package:subsciption_management_app/bloc/subscription_event.dart';
 import 'package:subsciption_management_app/config/theme.dart';
+import 'package:subsciption_management_app/service/hive_service.dart';
 import 'view/screens/get_started_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+
   runApp(const ScreenUtilInit(
       designSize: Size(375, 812), // Base design (iPhone X)
       minTextAdapt: true, // to prevent text overflow
@@ -51,12 +59,24 @@ class _SubscriptionAppState extends State<SubscriptionApp> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    //initHive();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Subscription Manager',
-      debugShowCheckedModeBanner: false,
-      theme: isDarkMode ? AppThemes.darkTheme : AppThemes.lightTheme,
-      home: GetStartedScreen(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
+    return BlocProvider(
+      create: (context) =>
+          SubscriptionBloc(HiveService())..add(LoadSubscriptions()),
+      child: MaterialApp(
+        title: 'Subscription Manager',
+        debugShowCheckedModeBanner: false,
+        theme: isDarkMode ? AppThemes.darkTheme : AppThemes.lightTheme,
+        home:
+            GetStartedScreen(toggleTheme: toggleTheme, isDarkMode: isDarkMode),
+      ),
     );
   }
 }

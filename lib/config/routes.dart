@@ -13,7 +13,7 @@ class Routes {
   static void navigateToMySubscriptions(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const MySubscriptionsScreen()),
+      MaterialPageRoute(builder: (context) => MySubscriptionsScreen()),
     );
   }
 
