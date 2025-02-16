@@ -20,7 +20,7 @@ Future<void> main() async {
   await HiveService().init();
 
   runApp(const ScreenUtilInit(
-      designSize: Size(375, 812), // Base design (iPhone X)
+      designSize: Size(375, 812),
       minTextAdapt: true, // to prevent text overflow
       child: ResponsiveScreen(child: SubscriptionApp())));
 }
@@ -59,17 +59,11 @@ class SubscriptionApp extends StatefulWidget {
 class _SubscriptionAppState extends State<SubscriptionApp> {
   bool isDarkMode = true;
 
+  // To toggle theme
   void toggleTheme() {
     setState(() {
       isDarkMode = !isDarkMode;
     });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    //initHive();
-    super.initState();
   }
 
   @override

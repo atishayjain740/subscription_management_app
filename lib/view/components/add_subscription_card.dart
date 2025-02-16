@@ -17,7 +17,7 @@ class AddSubscriptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 200.h,
       child: Card(
         color: color,
@@ -27,15 +27,13 @@ class AddSubscriptionCard extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         elevation: 4,
         child: Padding(
-          padding: EdgeInsets.all(10.w),
+          padding: const EdgeInsets.all(15),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(width: 12.w),
-
-              // Subscription Details
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -50,7 +48,6 @@ class AddSubscriptionCard extends StatelessWidget {
                   ],
                 ),
               ),
-
               InkWell(
                 onTap: onAddPressed,
                 child: const InitialCircle(

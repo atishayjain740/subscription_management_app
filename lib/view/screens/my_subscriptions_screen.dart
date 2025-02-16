@@ -13,19 +13,18 @@ import 'package:subsciption_management_app/view/screens/add_filter_bottomsheet.d
 import 'package:subsciption_management_app/view/screens/add_subscription_bottomsheet.dart';
 import 'package:subsciption_management_app/view/screens/delete_filter_bottomsheet.dart';
 import 'package:subsciption_management_app/view/screens/delete_subscription_bottomsheet.dart';
-import '../components/filter_button.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MySubscriptionsScreen extends StatefulWidget {
   const MySubscriptionsScreen({super.key});
 
   @override
-  _MySubscriptionsScreenState createState() => _MySubscriptionsScreenState();
+  MySubscriptionsScreenState createState() => MySubscriptionsScreenState();
 }
 
-class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
+class MySubscriptionsScreenState extends State<MySubscriptionsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  // ignore: prefer_final_fields
   List<Subscription> _subscriptions = [
     Subscription(name: "", category: "", price: "", imageUrl: ""),
   ];
@@ -306,53 +305,49 @@ class _MySubscriptionsScreenState extends State<MySubscriptionsScreen>
   }
 
   Widget _generalTabInfo(BuildContext context) {
-    // return BlocBuilder<SubscriptionBloc, SubscriptionState>(
-    //   builder: (context, state) {
-    //     if (state is SubscriptionLoaded) {
-    //       return Column(
-    //         children: [
-    //           SizedBox(
-    //             height: 20.h,
-    //           ),
-    //           Visibility(
-    //             visible: state.subscriptions.isNotEmpty,
-    //             child: Align(
-    //               alignment: Alignment.centerLeft,
-    //               child: Padding(
-    //                 padding: EdgeInsets.only(left: 25.h),
-    //                 child: Text(
-    //                   "₹ ${getTotalExpense(state)}/month",
-    //                   style: Theme.of(context).textTheme.displayLarge,
-    //                   textAlign: TextAlign.start,
-    //                 ),
-    //               ),
-    //             ),
-    //           ),
-    //           SizedBox(
-    //             height: 20.h,
-    //           ),
-    //           Visibility(
-    //             visible: state.subscriptions.isNotEmpty,
-    //             child: UpcomingPaymentCard(
-    //                 subscription: state.subscriptions[0],
-    //                 color: getCardColor(3)),
-    //           ),
-    //         ],
-    //       );
-    //     }
-    //     return const Center(child: CircularProgressIndicator());
-    //   },
-    // );
-
-    return Container();
+    return BlocBuilder<SubscriptionBloc, SubscriptionState>(
+      builder: (context, state) {
+        if (state is SubscriptionLoaded) {
+          return Column(
+            children: [
+              SizedBox(
+                height: 20.h,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 25.h),
+                  child: Text(
+                    "₹ ${getTotalExpense(state)}/month",
+                    style: Theme.of(context).textTheme.displayLarge,
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              state.subscriptions.isNotEmpty
+                  ? UpcomingPaymentCard(
+                      subscription: state.subscriptions[0],
+                      color: getCardColor(3))
+                  : Container(),
+            ],
+          );
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
   }
 
   double getTotalExpense(SubscriptionLoaded state) {
     try {
       double total = 0;
       for (Subscription s in state.subscriptions) {
-        double expense = double.parse(s.price);
-        total += expense;
+        double? expense = double.tryParse(s.price);
+        if (expense != null) {
+          total += expense;
+        }
       }
       return total;
     } catch (e) {

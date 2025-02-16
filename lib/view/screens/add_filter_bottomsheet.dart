@@ -104,6 +104,11 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
       return false;
     }
 
+    if (_filterNameController.text.toLowerCase() == "all") {
+      showMessageDialog(context, "Please enter a valid filter name");
+      return false;
+    }
+
     return true;
   }
 }

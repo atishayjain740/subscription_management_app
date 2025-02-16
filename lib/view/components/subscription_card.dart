@@ -20,7 +20,7 @@ class SubscriptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double offset = index * -50.h;
+    double offset = -50.h * index;
     return Transform.translate(
       offset: Offset(0, offset),
       child: SlideTransition(
@@ -39,10 +39,10 @@ class SubscriptionCard extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
-              margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
               elevation: 4,
               child: Padding(
-                padding: EdgeInsets.all(10.w),
+                padding: EdgeInsets.all(15),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -53,7 +53,7 @@ class SubscriptionCard extends StatelessWidget {
                         children: [
                           Text(
                             subscription.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: AppColors.white,
@@ -61,7 +61,7 @@ class SubscriptionCard extends StatelessWidget {
                           ),
                           Text(
                             "₹${subscription.price}",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: AppColors.white,
@@ -70,7 +70,7 @@ class SubscriptionCard extends StatelessWidget {
                           SizedBox(height: 4.h),
                           Text(
                             subscription.category,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.white,
                             ),

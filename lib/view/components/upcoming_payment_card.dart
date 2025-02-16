@@ -23,10 +23,10 @@ class UpcomingPaymentCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
-        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8.h),
         elevation: 4,
         child: Padding(
-          padding: EdgeInsets.all(16.w),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               Expanded(
@@ -35,8 +35,8 @@ class UpcomingPaymentCard extends StatelessWidget {
                   children: [
                     Text(
                       "Upcoming payment: ₹${subscription.price}",
-                      style: TextStyle(
-                        fontSize: 16.sp,
+                      style: const TextStyle(
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: AppColors.white,
                       ),
@@ -44,16 +44,16 @@ class UpcomingPaymentCard extends StatelessWidget {
                     SizedBox(height: 4.h),
                     Text(
                       subscription.name,
-                      style: TextStyle(
-                        fontSize: 16.sp,
+                      style: const TextStyle(
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: AppColors.white,
                       ),
                     ),
                     Text(
                       subscription.category,
-                      style: TextStyle(
-                        fontSize: 14.sp,
+                      style: const TextStyle(
+                        fontSize: 14,
                         color: AppColors.white,
                       ),
                     ),
