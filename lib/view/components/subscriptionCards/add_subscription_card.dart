@@ -18,7 +18,7 @@ class AddSubscriptionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200.h,
+      height: 150.h,
       child: Card(
         color: color,
         shape: RoundedRectangleBorder(

@@ -151,6 +151,9 @@ class MySubscriptionsScreenState extends State<MySubscriptionsScreen>
                   },
                 ),
               ),
+              const SizedBox(
+                height: 10,
+              )
             ],
           );
         }
