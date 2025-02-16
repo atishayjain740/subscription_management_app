@@ -1,13 +1,14 @@
 import 'package:equatable/equatable.dart';
-import 'package:subsciption_management_app/model/subscription.dart';
 
 abstract class SubscriptionEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
+// Event for loading the subscriptions
 class LoadSubscriptions extends SubscriptionEvent {}
 
+// Event for adding a new filter
 class AddFilterEvent extends SubscriptionEvent {
   final String filterName;
   final List<String> selectedSubscriptions;
@@ -19,6 +20,7 @@ class AddFilterEvent extends SubscriptionEvent {
   List<Object?> get props => [filterName, selectedSubscriptions];
 }
 
+// Event for deleting existing filters
 class DeleteFilterEvent extends SubscriptionEvent {
   final List<String> selectedFilters;
 
@@ -28,6 +30,7 @@ class DeleteFilterEvent extends SubscriptionEvent {
   List<Object?> get props => [selectedFilters];
 }
 
+// Event for change filter
 class ChangeFilterEvent extends SubscriptionEvent {
   final String filterName;
 
@@ -37,6 +40,7 @@ class ChangeFilterEvent extends SubscriptionEvent {
   List<Object?> get props => [filterName];
 }
 
+// Event for adding a new subscription
 class AddSubscriptionEvent extends SubscriptionEvent {
   final String subscriptionName;
   final String subscriptionPrice;
@@ -51,6 +55,7 @@ class AddSubscriptionEvent extends SubscriptionEvent {
   List<Object?> get props => [subscriptionName, subscriptionPrice];
 }
 
+// Event for deleting subscriptions
 class DeleteSubscriptionEvent extends SubscriptionEvent {
   final List<String> selectedSubscriptions;
 

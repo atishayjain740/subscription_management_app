@@ -8,12 +8,13 @@ class AppColors {
   static const Color white = Colors.white;
   static const Color grey = Colors.grey;
 
+  // Colors for subscription cards
   static const List<Color> cardColors = [
-    AppColors.primaryColor, // Soft Blue
-    Color(0xFFFE5EB4), // Pink
-    Color(0xFFF9BD03), // Yellow
-    Color(0xFF06B864), // Green
-    Color(0xFFFF6235), // Red/Orange
+    AppColors.primaryColor,
+    Color(0xFFFE5EB4),
+    Color(0xFFF9BD03),
+    Color(0xFF06B864),
+    Color(0xFFFF6235),
   ];
 }
 

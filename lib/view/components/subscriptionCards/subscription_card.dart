@@ -4,6 +4,7 @@ import 'package:subsciption_management_app/config/constants.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:subsciption_management_app/view/components/initial_circle.dart';
 
+// Subscription card with all the information
 class SubscriptionCard extends StatelessWidget {
   final Color color;
   final Subscription subscription;
@@ -42,7 +43,7 @@ class SubscriptionCard extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 16.w),
               elevation: 4,
               child: Padding(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,

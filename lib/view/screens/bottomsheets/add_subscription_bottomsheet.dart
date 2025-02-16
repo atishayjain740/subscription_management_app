@@ -6,16 +6,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:subsciption_management_app/view/components/custom_button.dart';
 import 'package:subsciption_management_app/view/components/show_dialog.dart';
 
+// Bottomsheet for adding a new subscription
 class AddSubscriptionBottomSheet extends StatefulWidget {
-  final String category;
+  final String category; // Selected filter
 
   const AddSubscriptionBottomSheet({super.key, required this.category});
   @override
-  _AddSubscriptionBottomSheetState createState() =>
-      _AddSubscriptionBottomSheetState();
+  AddSubscriptionBottomSheetState createState() =>
+      AddSubscriptionBottomSheetState();
 }
 
-class _AddSubscriptionBottomSheetState
+class AddSubscriptionBottomSheetState
     extends State<AddSubscriptionBottomSheet> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
@@ -47,7 +48,7 @@ class _AddSubscriptionBottomSheetState
             const Spacer(),
             CustomButton(
               onPressed: () {
-                if (validateInput()) {
+                if (_validateInput()) {
                   BlocProvider.of<SubscriptionBloc>(context).add(
                     AddSubscriptionEvent(
                         subscriptionName: _nameController.text,
@@ -66,16 +67,32 @@ class _AddSubscriptionBottomSheetState
     );
   }
 
-  bool validateInput() {
-    if (_nameController.text.isEmpty) {
+  // Validating the name and price
+  bool _validateInput() {
+    if (_nameController.text.trim().isEmpty) {
       showMessageDialog(context, "Please enter a subscription name");
       return false;
     }
-    if (_priceController.text.isEmpty) {
-      showMessageDialog(context, "Please enter the monthly price");
+    if (!_validatePrice(_priceController.text)) {
+      showMessageDialog(context, "Please enter a valid monthly price");
       return false;
     }
 
+    return true;
+  }
+
+  bool _validatePrice(String value) {
+    value = value.trim();
+    if (value.isEmpty) {
+      return false;
+    }
+    final price = double.tryParse(value);
+    if (price == null) {
+      return false;
+    }
+    if (price < 0) {
+      return false;
+    }
     return true;
   }
 }

@@ -7,21 +7,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:subsciption_management_app/view/components/custom_button.dart';
 import 'package:subsciption_management_app/view/components/show_dialog.dart';
 
+// Bottomsheet for adding a new filter
 class AddFilterBottomSheet extends StatefulWidget {
+  const AddFilterBottomSheet({super.key});
+
   @override
-  _AddFilterBottomSheetState createState() => _AddFilterBottomSheetState();
+  AddFilterBottomSheetState createState() => AddFilterBottomSheetState();
 }
 
-class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
+class AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
   final TextEditingController _filterNameController = TextEditingController();
-  final List<String> _selectedSubscriptions = [];
-  List<String> _allFilters = [];
+  final List<String> _selectedSubscriptions = []; // List of subs selected
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      onTap: () =>
+          FocusManager.instance.primaryFocus?.unfocus(), // For keyboard dismiss
       child: Container(
         padding: EdgeInsets.all(16.w),
         height: 700.h,
@@ -36,7 +39,6 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
               child: BlocBuilder<SubscriptionBloc, SubscriptionState>(
                 builder: (context, state) {
                   if (state is SubscriptionLoaded) {
-                    _allFilters = state.filters;
                     return NotificationListener(
                       onNotification: (t) {
                         if (t is UserScrollNotification) {
@@ -76,7 +78,7 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
             ),
             CustomButton(
               onPressed: () {
-                if (validateInput()) {
+                if (_validateInput()) {
                   BlocProvider.of<SubscriptionBloc>(context).add(
                     AddFilterEvent(
                       filterName: _filterNameController.text,
@@ -94,8 +96,9 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
     );
   }
 
-  bool validateInput() {
-    if (_filterNameController.text.isEmpty) {
+  // Validate the name and subs selected
+  bool _validateInput() {
+    if (_filterNameController.text.trim().isEmpty) {
       showMessageDialog(context, "Please enter a filter name");
       return false;
     }
@@ -104,7 +107,7 @@ class _AddFilterBottomSheetState extends State<AddFilterBottomSheet> {
       return false;
     }
 
-    if (_filterNameController.text.toLowerCase() == "all") {
+    if (_filterNameController.text.trim().toLowerCase() == "all") {
       showMessageDialog(context, "Please enter a valid filter name");
       return false;
     }

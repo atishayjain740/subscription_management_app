@@ -6,8 +6,10 @@ abstract class SubscriptionState extends Equatable {
   List<Object?> get props => [];
 }
 
+// Initial state when the subs are not loaded
 class SubscriptionInitial extends SubscriptionState {}
 
+// State after the subs are loaded
 class SubscriptionLoaded extends SubscriptionState {
   final List<Subscription> subscriptions;
   final List<String> filters;

@@ -8,7 +8,7 @@ class HiveService {
   static Box<Subscription>? _subscriptionBox;
   static Box<List<String>>? _filterBox;
 
-  /// Open Hive Boxes Only Once
+  // Openig hive boxes. Open Hive Boxes Only Once
   Future<void> init() async {
     if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(
@@ -28,7 +28,7 @@ class HiveService {
     }
   }
 
-  /// Save a list of Subscriptions
+  // Save Subscriptions
   Future<void> saveSubscriptions(List<Subscription> subscriptions) async {
     await _subscriptionBox!.clear(); // Remove old data
     for (var i = 0; i < subscriptions.length; i++) {
@@ -36,22 +36,22 @@ class HiveService {
     }
   }
 
-  /// Get all Subscriptions
+  // Get all Subscriptions
   List<Subscription> getSubscriptions() {
     try {
       return _subscriptionBox!.values.toList();
     } catch (e) {
-      print("Error retrieving subscriptions: $e");
+      //print("Error retrieving subscriptions: $e");
       return [];
     }
   }
 
-  /// Save Filters (List of Strings)
+  // Save Filters
   Future<void> saveFilters(List<String> filters) async {
     await _filterBox!.put("filter_list", filters);
   }
 
-  /// Get Filters
+  // Get Filters. All fliter is there by default.
   List<String> getFilters() {
     return _filterBox!.get("filter_list", defaultValue: <String>["All"])!;
   }

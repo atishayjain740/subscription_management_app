@@ -7,23 +7,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:subsciption_management_app/view/components/custom_button.dart';
 import 'package:subsciption_management_app/view/components/show_dialog.dart';
 
-class DeleteSubscriptionBottomSheet extends StatefulWidget {
-  const DeleteSubscriptionBottomSheet({super.key});
+// Bottomsheet for deleting an existing filter
+class DeleteFilterBottomSheet extends StatefulWidget {
+  const DeleteFilterBottomSheet({super.key});
 
   @override
-  _DeleteSubscriptionBottomSheetState createState() =>
-      _DeleteSubscriptionBottomSheetState();
+  DeleteFilterBottomSheetState createState() => DeleteFilterBottomSheetState();
 }
 
-class _DeleteSubscriptionBottomSheetState
-    extends State<DeleteSubscriptionBottomSheet> {
-  final List<String> _selectedSubscriptions = [];
+class DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
+  final List<String> _selectedFilters =
+      []; // Filter that the user selects to delete
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.w),
-      height: 500.h,
+      height: 700.h,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,26 +32,23 @@ class _DeleteSubscriptionBottomSheetState
               builder: (context, state) {
                 if (state is SubscriptionLoaded) {
                   return ListView(
-                    children: state.subscriptions
-                        .where(
-                      (element) =>
-                          element.category == state.selectedFilter ||
-                          state.selectedFilter == "All",
-                    )
-                        .map((subscription) {
+                    children: state.filters.map((filter) {
+                      // Cannot delete all filter
+                      if (filter == "All") {
+                        return Container();
+                      }
                       return CheckboxListTile(
                         activeColor: Theme.of(context).primaryColor,
                         checkboxShape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
-                        title: Text(subscription.name),
-                        value:
-                            _selectedSubscriptions.contains(subscription.name),
+                        title: Text(filter),
+                        value: _selectedFilters.contains(filter),
                         onChanged: (bool? value) {
                           setState(() {
                             if (value == true) {
-                              _selectedSubscriptions.add(subscription.name);
+                              _selectedFilters.add(filter);
                             } else {
-                              _selectedSubscriptions.remove(subscription.name);
+                              _selectedFilters.remove(filter);
                             }
                           });
                         },
@@ -65,27 +62,28 @@ class _DeleteSubscriptionBottomSheetState
           ),
           CustomButton(
             onPressed: () {
-              if (validateInput()) {
+              if (_validateInput()) {
                 BlocProvider.of<SubscriptionBloc>(context).add(
-                  DeleteSubscriptionEvent(
-                    selectedSubscriptions: _selectedSubscriptions,
+                  DeleteFilterEvent(
+                    selectedFilters: _selectedFilters,
                   ),
                 );
                 Navigator.pop(context);
               }
             },
-            text: "Delete Subscription",
+            text: "Delete Filter",
           ),
         ],
       ),
     );
   }
 
-  bool validateInput() {
-    if (_selectedSubscriptions.isEmpty) {
-      showMessageDialog(context, "Please select atleast one subscription");
+  bool _validateInput() {
+    if (_selectedFilters.isEmpty) {
+      showMessageDialog(context, "Please select atleast one filter");
       return false;
     }
+
     return true;
   }
 }

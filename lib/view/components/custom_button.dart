@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:subsciption_management_app/config/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// Custom large button.
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -15,7 +16,7 @@ class CustomButton extends StatelessWidget {
       height: 50.h,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: Theme.of(context).primaryColor,
           foregroundColor: AppColors.white,
           padding: EdgeInsets.symmetric(vertical: 5.h),
           shape: RoundedRectangleBorder(

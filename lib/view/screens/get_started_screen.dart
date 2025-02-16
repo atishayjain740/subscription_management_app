@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:subsciption_management_app/config/constants.dart';
 import 'package:subsciption_management_app/view/components/custom_button.dart';
 import '../../config/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,7 +47,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
       ),
       body: AnimatedOpacity(
         opacity: _isVisible ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 1500),
+        duration: const Duration(milliseconds: 2000),
         child: Padding(
           padding: EdgeInsets.all(20.w), // Padding around the content
           child: Column(
@@ -57,7 +58,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   return const RadialGradient(
                     center: Alignment.center,
                     radius: 0.5, // Controls the fade intensity
-                    colors: [Colors.white, Colors.transparent],
+                    colors: [AppColors.white, Colors.transparent],
                     stops: [0.4, 1.0], // 40% visible, then fades out
                   ).createShader(bounds);
                 },

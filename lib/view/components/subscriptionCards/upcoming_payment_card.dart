@@ -4,6 +4,7 @@ import 'package:subsciption_management_app/config/constants.dart';
 import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:subsciption_management_app/view/components/initial_circle.dart';
 
+// Card to display in the general tab.
 class UpcomingPaymentCard extends StatelessWidget {
   final Color color;
   final Subscription subscription;
@@ -23,7 +24,7 @@ class UpcomingPaymentCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8.h),
+        margin: EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.h),
         elevation: 4,
         child: Padding(
           padding: const EdgeInsets.all(16),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:subsciption_management_app/config/constants.dart';
 
 class InitialCircle extends StatelessWidget {
   final String name;
@@ -17,7 +18,7 @@ class InitialCircle extends StatelessWidget {
       height: size,
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.white, // White background
+        color: AppColors.white, // White background
       ),
       alignment: Alignment.center,
       child: Text(
@@ -25,7 +26,7 @@ class InitialCircle extends StatelessWidget {
         style: TextStyle(
           fontSize: size * 0.5, // Adjust font size based on circle size
           fontWeight: FontWeight.bold,
-          color: Colors.black, // Bold black text
+          color: AppColors.black,
         ),
       ),
     );

@@ -3,25 +3,29 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:subsciption_management_app/bloc/subscription_bloc.dart';
 import 'package:subsciption_management_app/bloc/subscription_event.dart';
 import 'package:subsciption_management_app/bloc/subscription_state.dart';
-import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:subsciption_management_app/view/components/custom_button.dart';
 import 'package:subsciption_management_app/view/components/show_dialog.dart';
 
-class DeleteFilterBottomSheet extends StatefulWidget {
+// Bottomsheet for deleting an existing subscription
+class DeleteSubscriptionBottomSheet extends StatefulWidget {
+  const DeleteSubscriptionBottomSheet({super.key});
+
   @override
-  _DeleteFilterBottomSheetState createState() =>
-      _DeleteFilterBottomSheetState();
+  DeleteSubscriptionBottomSheetState createState() =>
+      DeleteSubscriptionBottomSheetState();
 }
 
-class _DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
-  final List<String> _selectedFilters = [];
+class DeleteSubscriptionBottomSheetState
+    extends State<DeleteSubscriptionBottomSheet> {
+  final List<String> _selectedSubscriptions =
+      []; // List fo subs selected to delete
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.w),
-      height: 700.h,
+      height: 500.h,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,22 +34,26 @@ class _DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
               builder: (context, state) {
                 if (state is SubscriptionLoaded) {
                   return ListView(
-                    children: state.filters.map((filter) {
-                      if (filter == "All") {
-                        return Container();
-                      }
+                    children: state.subscriptions
+                        .where(
+                      (element) =>
+                          element.category == state.selectedFilter ||
+                          state.selectedFilter == "All",
+                    )
+                        .map((subscription) {
                       return CheckboxListTile(
                         activeColor: Theme.of(context).primaryColor,
                         checkboxShape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
-                        title: Text(filter),
-                        value: _selectedFilters.contains(filter),
+                        title: Text(subscription.name),
+                        value:
+                            _selectedSubscriptions.contains(subscription.name),
                         onChanged: (bool? value) {
                           setState(() {
                             if (value == true) {
-                              _selectedFilters.add(filter);
+                              _selectedSubscriptions.add(subscription.name);
                             } else {
-                              _selectedFilters.remove(filter);
+                              _selectedSubscriptions.remove(subscription.name);
                             }
                           });
                         },
@@ -59,28 +67,27 @@ class _DeleteFilterBottomSheetState extends State<DeleteFilterBottomSheet> {
           ),
           CustomButton(
             onPressed: () {
-              if (validateInput()) {
+              if (_validateInput()) {
                 BlocProvider.of<SubscriptionBloc>(context).add(
-                  DeleteFilterEvent(
-                    selectedFilters: _selectedFilters,
+                  DeleteSubscriptionEvent(
+                    selectedSubscriptions: _selectedSubscriptions,
                   ),
                 );
                 Navigator.pop(context);
               }
             },
-            text: "Delete Filter",
+            text: "Delete Subscription",
           ),
         ],
       ),
     );
   }
 
-  bool validateInput() {
-    if (_selectedFilters.isEmpty) {
-      showMessageDialog(context, "Please select atleast one filter");
+  bool _validateInput() {
+    if (_selectedSubscriptions.isEmpty) {
+      showMessageDialog(context, "Please select atleast one subscription");
       return false;
     }
-
     return true;
   }
 }

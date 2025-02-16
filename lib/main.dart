@@ -34,7 +34,8 @@ class ResponsiveScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        double maxWidth = 700; // Limit the width to a max size
+        double maxWidth =
+            700; // Limit the width to a max size. For very large screens.
 
         return Center(
           child: ConstrainedBox(

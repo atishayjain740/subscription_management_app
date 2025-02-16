@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:subsciption_management_app/config/constants.dart';
-import 'package:subsciption_management_app/model/subscription.dart';
 import 'package:subsciption_management_app/view/components/initial_circle.dart';
 
+// Card for adding/deleting subscription
 class AddSubscriptionCard extends StatelessWidget {
   final VoidCallback onAddPressed;
   final VoidCallback onDeletePressed;
-  Color color;
-  AddSubscriptionCard(
+  final Color color;
+  const AddSubscriptionCard(
       {Key? key,
       required this.onAddPressed,
       required this.onDeletePressed,

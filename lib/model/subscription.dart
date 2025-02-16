@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-part 'subscription.g.dart'; // Run: flutter packages pub run build_runner build
+part 'subscription.g.dart'; // For hive integration
 
 @HiveType(typeId: 0)
 class Subscription {
